@@ -62,7 +62,9 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
         "name": "Auto Update Script",
         "email": "admin@jackhil.de",
         "content": base64.b64encode(
-            (f"SEM_VER={new_version[0]}\nDOCKER_TAG={new_version[1]}\n").encode()
+            (
+                f"SEM_VER={new_version[0].split('+')[0]}\nSEM_VER_BUILD={new_version[0].replace('+', '-')}\nDOCKER_TAG={new_version[1]}\n"
+            ).encode()
         ).decode(),
     }
     headers = {
