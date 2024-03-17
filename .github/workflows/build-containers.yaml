@@ -7,7 +7,6 @@ on:
 jobs:
   build-container:
     name: Build containers
-    continue-on-error: true
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
