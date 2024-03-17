@@ -26,7 +26,7 @@ def get_tagged_versions() -> list[semver.Version]:
             cleaned = f"{sv[0]}.{sv[1]}.{sv[2]}+{sv[3]}"
         if semver.Version.is_valid(cleaned):
             ver = semver.Version.parse(cleaned)
-            versions.append(ver)
+            versions.append((ver, t))
         else:
             print(t, "isn't a version. not tagging")
 
@@ -39,13 +39,15 @@ def get_current_version() -> semver.Version:
     print("Reading repo's version")
     with open(".version", "r") as f:
         txt = f.read()
-    if txt and semver.Version.is_valid(txt):
-        return semver.Version.parse(txt)
+    if txt:
+        sem_ver_str, _plex_ver_str = txt.split(",")
+        if semver.Version.is_valid(sem_ver_str):
+            return semver.Version.parse(sem_ver_str)
     else:
         return semver.Version.parse("0.0.0")
 
 
-def update_repo_version(new_version: semver.Version):
+def update_repo_version(new_version: tuple[semver.Version, str]):
     """ "Update version in github repo. Assumes it's running in the context of github actions"""
     print("trying to update version in repo")
     api_url = os.environ["GITHUB_API_URL"]
@@ -56,7 +58,9 @@ def update_repo_version(new_version: semver.Version):
         "message": f"Bump version to {new_version}",
         "name": "Auto Update Script",
         "email": "admin@jackhil.de",
-        "content": base64.b64encode((str(new_version) + "\n").encode()).decode(),
+        "content": base64.b64encode(
+            (f"{new_version[0]},{new_version[1]}\n").encode()
+        ).decode(),
     }
     headers = {
         "Accept": "application/json",
