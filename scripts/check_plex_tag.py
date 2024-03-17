@@ -40,9 +40,12 @@ def get_current_version() -> semver.Version:
     with open(".version", "r") as f:
         txt = f.read()
     if txt:
-        sem_ver_str, _plex_ver_str = txt.split(",")
-        if semver.Version.is_valid(sem_ver_str):
-            return semver.Version.parse(sem_ver_str)
+        versions = {}
+        for l in txt.splitlines():
+            l_parts = l.split("=")
+            versions[l_parts[0]] = l_parts[1]
+        if semver.Version.is_valid(versions.get("SEM_VER", "")):
+            return semver.Version.parse(versions["SEM_VER"])
     else:
         return semver.Version.parse("0.0.0")
 
@@ -59,7 +62,7 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
         "name": "Auto Update Script",
         "email": "admin@jackhil.de",
         "content": base64.b64encode(
-            (f"{new_version[0]},{new_version[1]}\n").encode()
+            (f"SEM_VER={new_version[0]}\nDOCKER_TAG={new_version[1]}\n").encode()
         ).decode(),
     }
     headers = {

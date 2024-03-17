@@ -18,14 +18,14 @@ jobs:
       - name: Get version
         shell: bash
         run: |
-          echo "CONTAINER_VERSION=$(cat .version)" >> "$GITHUB_ENV"
+          echo cat .version >> "$GITHUB_ENV"
       - name: build container ${{ matrix.component }}
         id: build-container
         uses: redhat-actions/buildah-build@v2
         with:
           image: ghcr.io/onemorebyte/plex
-          tags: ${{ matrix.dockerfile }} ${{ env.CONTAINER_VERSION }}-${{ matrix.dockerfile}}
-          build-args: "CONTAINER_VERSION=${{ env.CONTAINER_VERSION }}"
+          tags: ${{ matrix.dockerfile }} ${{ env.SEM_VER }}-${{ matrix.dockerfile}}
+          build-args: "CONTAINER_VERSION=${{ env.DOCKER_TAG }}"
           containerfiles: |
             ./Dockerfile.${{ matrix.dockerfile }}
 
