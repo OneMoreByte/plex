@@ -1,0 +1,18 @@
+name: Check for latest tag
+on:
+  workflow_dispatch: {}
+  schedule:
+    # Check for an update daily
+    - cron: "0 18 * * *"
+
+jobs:
+  check-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+      - run: |
+          pip install -r scripts/requirements.txt
+          python -m scripts/check_plex_tag.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
