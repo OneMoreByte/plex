@@ -62,6 +62,13 @@ def update_repo_version(new_version: semver.Version):
         "Authorization": f"Bearer {api_token}",
         "X-Github-Api-Version": "2022-11-28",
     }
+    res = requests.get(url, headers)
+    if res.status_code == 200:
+        data = res.json()
+        payload["sha"] = data.get("sha")
+    else:
+        print("failed to get repo file data")
+        return
     res = requests.put(url, headers=headers, json=payload)
     if res.status_code != "200":
         print("failed to update version.\n", res.text)
