@@ -5,6 +5,10 @@ on:
     # Check for an update daily
     - cron: "0 18 * * *"
 
+permissions:
+  contents: "write"
+  actions: "write"
+
 jobs:
   check-tag:
     runs-on: ubuntu-latest
