@@ -18,7 +18,7 @@ jobs:
       - name: Get version
         shell: bash
         run: |
-          echo cat .version >> "$GITHUB_ENV"
+          cat .version >> "$GITHUB_ENV"
       - name: build container ${{ matrix.component }}
         id: build-container
         uses: redhat-actions/buildah-build@v2
