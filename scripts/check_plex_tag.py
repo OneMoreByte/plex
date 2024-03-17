@@ -44,8 +44,8 @@ def get_current_version() -> semver.Version:
         for l in txt.splitlines():
             l_parts = l.split("=")
             versions[l_parts[0]] = l_parts[1]
-        if semver.Version.is_valid(versions.get("SEM_VER", "")):
-            return semver.Version.parse(versions["SEM_VER"])
+        if semver.Version.is_valid(versions.get("SEM_VER_BUILD", "")):
+            return semver.Version.parse(versions["SEM_VER_BUILD"])
     else:
         return semver.Version.parse("0.0.0")
 
