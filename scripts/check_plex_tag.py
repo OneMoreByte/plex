@@ -1,5 +1,6 @@
 import base64
 import os
+import sys
 
 import oras.client
 import requests
@@ -68,10 +69,11 @@ def update_repo_version(new_version: semver.Version):
         payload["sha"] = data.get("sha")
     else:
         print("failed to get repo file data")
-        return
+        sys.exit(1)
     res = requests.put(url, headers=headers, json=payload)
     if res.status_code != "200":
         print("failed to update version.\n", res.text)
+        sys.exit(1)
 
 
 def main():
