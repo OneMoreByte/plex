@@ -86,7 +86,7 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
 def main():
     versions = get_tagged_versions()
     repo_version = get_current_version()
-    if versions[0] > repo_version:
+    if versions[0][0] > repo_version:
         print(f"repo version {repo_version} is lower than newest tag {versions[0]}")
         update_repo_version(versions[0])
     else:
