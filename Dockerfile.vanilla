@@ -1,0 +1,3 @@
+ARG CONTAINER_VERSION=latest
+FROM docker.io/plexinc/plex:${CONTAINER_VERSION}
+

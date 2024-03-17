@@ -1,0 +1,39 @@
+---
+name: Build containers
+on:
+  push: {}
+  workflow_dispatch: {}
+
+jobs:
+  build-container:
+    name: Build containers
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile: [vanilla, nvidia-patched]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get version
+        shell: bash
+        run: |
+          echo "CONTAINER_VERSION=$(cat .version)" >> "$GITHUB_ENV"
+      - name: build container ${{ matrix.component }}
+        id: build-container
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: ghcr.io/onemorebyte/plex
+          tags: ${{ matrix.dockerfile }} ${{ env.CONTAINER_VERSION }}-${{ matrix.dockerfile}}
+          build-args: "CONTAINER_VERSION=${{ env.CONTAINER_VERSION }}"
+          containerfiles: |
+            ./Dockerfile.${{ matrix.dockerfile }}
+
+      - name: push to image repo
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-container.outputs.image }}
+          tags: ${{ steps.build-container.outputs.tags }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,3 @@
+[submodule "nvidia-patch"]
+	path = nvidia-patch
+	url = git@github.com:keylase/nvidia-patch.git

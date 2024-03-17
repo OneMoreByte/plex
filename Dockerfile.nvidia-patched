@@ -1,0 +1,14 @@
+ARG CONTAINER_VERSION=latest
+FROM docker.io/plexinc/pms-docker:${CONTAINER_VERSION}
+
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,video,utility
+
+RUN apt-get update && apt-get install -y nvidia-utils-535
+
+RUN mkdir -p /usr/local/bin /patched-lib
+COPY nvidia-patch/patch.sh nvidia-docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/patch.sh /usr/local/bin/nvidia-docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/nvidia-docker-entrypoint.sh"]
+
