@@ -71,7 +71,7 @@ def update_repo_version(new_version: semver.Version):
         print("failed to get repo file data")
         sys.exit(1)
     res = requests.put(url, headers=headers, json=payload)
-    if res.status_code != "200":
+    if res.status_code != 200:
         print("failed to update version.\n", res.text)
         sys.exit(1)
 
