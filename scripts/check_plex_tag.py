@@ -83,6 +83,13 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
     if res.status_code != 200:
         print("failed to update version.\n", res.text)
         sys.exit(1)
+    requests.post(
+        f"{api_url}/repos/{repo}/actions/workflows/build-containers.yaml/dispatches",
+        json={"ref": "refs/heads/main"},
+    )
+    if res.status_code != 200:
+        print("failed to trigger a rebuild\n", res.text)
+        sys.exit(1)
 
 
 def main():
