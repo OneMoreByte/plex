@@ -26,7 +26,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: ghcr.io/onemorebyte/plex
-          tags: ${{ matrix.dockerfile }} ${{ env.SEM_VER }}-${{ matrix.dockerfile}}
+          tags: ${{ matrix.dockerfile }} ${{ env.SEM_VER }}-${{ matrix.dockerfile}} ${{ env.SEM_VER_BUILD }}-${{ matrix.dockerfile }}
           build-args: "CONTAINER_VERSION=${{ env.DOCKER_TAG }}"
           containerfiles: |
             ./Dockerfile.${{ matrix.dockerfile }}
