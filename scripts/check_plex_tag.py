@@ -70,7 +70,6 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
     headers = {
         "Accept": "application/json",
         "Authorization": f"Bearer {api_token}",
-        "X-Github-Api-Version": "2022-11-28",
     }
     res = requests.get(url, headers)
     if res.status_code == 200:
@@ -86,6 +85,7 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
     res = requests.post(
         f"{api_url}/repos/{repo}/actions/workflows/build-containers.yaml/dispatches",
         json={"ref": "refs/heads/main"},
+        headers=headers,
     )
     if res.status_code != 200:
         print("failed to trigger a rebuild\n", res.text)
