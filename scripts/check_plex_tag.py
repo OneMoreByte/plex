@@ -87,7 +87,7 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
         json={"ref": "refs/heads/main"},
         headers=headers,
     )
-    if res.status_code != 200:
+    if res.status_code != 204:
         print("failed to trigger a rebuild\n", res.text)
         sys.exit(1)
 
