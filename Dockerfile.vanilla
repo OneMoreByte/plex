@@ -1,3 +1,2 @@
 ARG CONTAINER_VERSION=latest
-FROM docker.io/plexinc/plex:${CONTAINER_VERSION}
-
+FROM docker.io/plexinc/pms-docker:${CONTAINER_VERSION}
