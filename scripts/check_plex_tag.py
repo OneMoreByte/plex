@@ -22,7 +22,7 @@ def get_tagged_versions() -> list[tuple[semver.Version, str]]:
         cleaned = t.split("-")[0]
         if "." in cleaned:
             sv = cleaned.split(".")
-            cleaned = f"{sv[0]}.{sv[1]}.{sv[2]}+{sv[3]}"
+            cleaned = f"{sv[0]}.{sv[1]}.{sv[2]}-{sv[3]}"
         if semver.Version.is_valid(cleaned):
             ver = semver.Version.parse(cleaned)
             versions.append((ver, t))
@@ -62,7 +62,7 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
         "email": "admin@jackhil.de",
         "content": base64.b64encode(
             (
-                f"SEM_VER={str(new_version[0]).split('+')[0]}\nSEM_VER_BUILD={str(new_version[0]).replace('+', '-')}\nDOCKER_TAG={new_version[1]}\n"
+                f"SEM_VER={str(new_version[0])[0]}\nSEM_VER_BUILD={str(new_version[0])}\nDOCKER_TAG={new_version[1]}\n"
             ).encode()
         ).decode(),
     }
