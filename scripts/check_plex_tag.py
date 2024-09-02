@@ -7,9 +7,8 @@ import requests
 import semver
 
 
-def get_tagged_versions() -> list[semver.Version]:
-    """Returns reverse sorted list of plex versions.
-    Converts version tags to semver"""
+def get_tagged_versions() -> list[tuple[semver.Version, str]]:
+    """Returns reverse sorted list of semver Versions and the docker tag they were derived from."""
     print("Getting tagged versions on docker.io")
     client = oras.client.OrasClient(
         hostname="index.docker.io",
@@ -95,12 +94,13 @@ def update_repo_version(new_version: tuple[semver.Version, str]):
 def main():
     versions = get_tagged_versions()
     repo_version = get_current_version()
-    if versions[0][0] > repo_version:
-        print(f"repo version {repo_version} is lower than newest tag {versions[0]}")
-        update_repo_version(versions[0])
+    latest_remote_version, remote_tag = versions[0]
+    if latest_remote_version > repo_version:
+        print(f"repo version {repo_version} is lower than newest tag {remote_tag}")
+        update_repo_version((latest_remote_version, remote_tag))
     else:
         print(
-            f"repo version {repo_version} greater or equal to newest tag {versions[0]}"
+            f"repo version {repo_version} greater or equal to newest tag {remote_tag}"
         )
 
 
