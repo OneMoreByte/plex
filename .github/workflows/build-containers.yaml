@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dockerfile: [vanilla, nvidia-patched]
+        dockerfile: [vanilla]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,7 +25,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: ghcr.io/onemorebyte/plex
-          tags: ${{ matrix.dockerfile }} ${{ env.SEM_VER }}-${{ matrix.dockerfile}} ${{ env.SEM_VER_BUILD }}-${{ matrix.dockerfile }}
+          tags: ${{ matrix.dockerfile }} ${{ env.SEM_VER }}-${{ matrix.dockerfile}} ${{ env.SEM_VER_BUILD }}-${{ matrix.dockerfile }} ${{ if matrix.dockerfile == 'vanilla' && env.SEM_VER_BUILD || '' }}
           build-args: "CONTAINER_VERSION=${{ env.DOCKER_TAG }}"
           containerfiles: |
             ./Dockerfile.${{ matrix.dockerfile }}
